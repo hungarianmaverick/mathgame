@@ -6,15 +6,66 @@
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 <body>
-	<div class="row">
-		<p class="text-center"><span id="question"></span>
-		<input type="text" id="input"/><span class="text-center" id="status" style="display: none;"></span></p>
+	<div id="game" style="opacity: 0;">
+		<div class="text-center">
+			<span id="question"></span>
+			<input type="text" id="input"/>
+			<span style="opacity: 0;" class="glyphicon glyphicon-remove" id="status"></span>
+		</div>
 		<center><div id="gauge" style="width: 200px; height: 160px"></div></center>
+	</div>
+	<div id="startDialog" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+				    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				    <h4 class="modal-title" id="myModalLabel">Welcome to my little math game!</h4>
+				</div>
+				<div class="modal-body">
+					<p>You'll have 60 seconds to answer to as many question as you can.
+					To start the game, press the Start! button.</p>
+      			</div>
+				<div class="modal-footer">
+					<button id="startGame" type="button" class="btn btn-success">Start!</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="endDialog" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+				    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				    <h4 class="modal-title" id="myModalLabel">My little math game is over...</h4>
+				</div>
+				<div class="modal-body">
+					<p>That's it, time's up!</p>
+					<p>Your results are:</p>
+					<ul id="results">
+					</ul>
+					<p>Wanna play another round?</p>
+      			</div>
+				<div class="modal-footer">
+					<button id="restartGame" type="button" class="btn btn-success">Restart!</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	<script src="js/lib/jquery-2.1.0.min.js"></script>
 	<script src="js/lib/raphael.2.1.0.min.js"></script>
 	<script src="js/lib/justgage.1.0.1.min.js"></script>
+	<script src="js/lib/bootstrap.min.js"></script>
 	<script src="js/helpers.js"></script>
 	<script src="js/game.js"></script> 
+
+	<script>
+	game = new MathGame();
+	$('#startGame').click(function (e){
+		game.startGame();
+	});
+	$('#restartGame').click(function (e){
+		game.restartGame();
+	});
+	</script>
 </body>
 </html>
