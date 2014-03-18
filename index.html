@@ -2,71 +2,68 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>keypress demo</title>
+	<title>My little math game</title>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 <body>
 	<h1>UNDER DEVELOPMENT!</h1>
-	<div id="game" style="opacity: 0;">
-		<div class="text-center">
-			<span id="question"></span>
-			<input type="text" id="input"/>
-			<span style="opacity: 0;" class="glyphicon glyphicon-remove" id="status"></span>
-		</div>
-		<center><div id="gauge" style="width: 200px; height: 160px"></div></center>
-	</div>
-	<div id="startDialog" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-				    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				    <h4 class="modal-title" id="myModalLabel">Welcome to my little math game!</h4>
-				</div>
-				<div class="modal-body">
-					<p>You'll have 60 seconds to answer to as many question as you can.
-					To start the game, press the Start! button.</p>
-      			</div>
-				<div class="modal-footer">
-					<button id="startGame" type="button" class="btn btn-success">Start!</button>
-				</div>
+	<div align="center" id="content">
+		<div id="frmWelcome" style="max-width: 500px; opacity: 0;">
+			<h1>Welcome to my little math game!</h1>
+			<p>Please choose from the available game modes:</p>
+			<div class="span2">
+				<p><button id="btnClassic" class="btn btn-success btn-block">Classic</button></p>
+				<p><button id="btnSurvival" class="btn btn-danger btn-block" disabled="disabled">Survival</button></p>
 			</div>
 		</div>
-	</div>
-	<div id="endDialog" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-				    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				    <h4 class="modal-title" id="myModalLabel">My little math game is over...</h4>
-				</div>
-				<div class="modal-body">
-					<p>That's it, time's up!</p>
-					<p>Your results are:</p>
-					<ul id="results">
-					</ul>
-					<p>Wanna play another round?</p>
-      			</div>
-				<div class="modal-footer">
-					<button id="restartGame" type="button" class="btn btn-success">Restart!</button>
-				</div>
+		<div id="frmResults" style="max-width: 500px; opacity: 0; display: none;">
+			<h1>That's it, time's up!</h1>
+			<h2>Your results:</h2>
+			<h1>
+				<span class="label label-success">Scored:</span> <span id="lblScored"></span>
+				<span class="label label-danger">Missed:</span> <span id="lblMissed"></span>
+			</h1>
+			<br />
+			<div class="span2">
+				<p><button id="btnRestart" class="btn btn-primary btn-block">New game</button></p>
 			</div>
 		</div>
+		<div id="frmHelp" style="max-width: 500px; opacity: 0; display: none;">
+			<h1>How to play?</h1>
+			<p>Your result:</p>
+			<ul id="results">
+			</ul>
+			<div class="span2">
+				<p><button id="btnRestart" class="btn btn-primary btn-block">New game</button></p>
+			</div>
+		</div>		
+		<div id="game" style="opacity: 0;" align="center">
+			<div>
+				<h1>Classic mode</h1>
+				<span id="question" style="min-width: 80px; font-size: 16pt;"></span>
+				<input type="text" id="input" style="width: 70px; font-size: 16pt;"/>
+				<span style="opacity: 0;" id="status"></span>
+			</div>
+			<div id="gauge" style="width: 200px; height: 160px;"></div>
+		</div>
 	</div>
-	<script src="js/lib/jquery-2.1.0.min.js"></script>
-	<script src="js/lib/raphael.2.1.0.min.js"></script>
-	<script src="js/lib/justgage.1.0.1.min.js"></script>
-	<script src="js/lib/bootstrap.min.js"></script>
-	<script src="js/helpers.js"></script>
-	<script src="js/game.js"></script> 
+</div>
+<script src="js/lib/jquery-2.1.0.min.js"></script>
+<script src="js/lib/raphael.2.1.0.min.js"></script>
+<script src="js/lib/justgage.1.0.1.min.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/helpers.js"></script>
+<script src="js/game.js"></script>
+<script>
+game = new MathGame();
 
-	<script>
-	game = new MathGame();
-	$('#startGame').click(function (e){
-		game.startGame();
-	});
-	$('#restartGame').click(function (e){
-		game.restartGame();
-	});
-	</script>
+$("#btnClassic").click(function(){
+    game.startGame();
+});
+
+$("#btnRestart").click(function(){
+    game.newGame();
+});
+</script>
 </body>
 </html>

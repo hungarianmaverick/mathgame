@@ -15,21 +15,16 @@ function MathGame() {
         });
     };
 
+    this.displayElement = function (alpha, element){
+        $('#'+element).animate({opacity: alpha}, 200);
+    };
+
     this.clearInput = function (){
         $('#'+self.inputField).val("");
     };
 
     this.setQuestion = function (a, b){
         $('#'+self.questionField).text(a.toString() + getSignedNumber(b) + "=");
-    };
-
-    this.nextRound = function(){
-        $('#'+self.inputField).keydown(function (e){
-            if (self.started && e.keyCode == 13){
-                answer = $('#'+self.inputField).val();
-                self.checkInput(e, answer);
-            }
-        })	
     };
 
     this.checkInput = function(e, answer){
@@ -41,6 +36,7 @@ function MathGame() {
         }
         else{
             self.missesResults[self.questionId]++;
+            self.missed++;
             self.setStatus(false);
         }
     }
@@ -63,66 +59,80 @@ function MathGame() {
 
     this.startGame = function() {
         this.startTime = new Date().getTime();
-        this.questionId = 0;
         this.started = true;
         
         this.mainTimerHandler = setInterval(this.mainTimer, 1000);
-        self.gauge.refresh(self.timeAvailable);
+        this.gauge.refresh(self.timeAvailable);
         this.scramble();
-        this.nextRound();
-        $('#startDialog').modal('hide');
-        $('#endDialog').modal('hide');
 
-        $('#'+self.gameField).animate({opacity: 1}, 200);
+        // Hide welcome screen
+        this.displayElement(0, "frmWelcome");
+        $('#frmWelcome').hide();
+
+        this.displayElement(1, this.gameField);
+
         $('#'+this.inputField).focus()
     }
 
     this.endGame = function() {
         this.started = false;
 
-        var resultList = [];
-        var answered = self.questionId;
+        $('#lblScored').html(self.questionId-1);
+        $('#lblMissed').html(self.missed);
 
-        for(var i=1; i<self.questionId; i++){
-          resultList.push('<li>[' + i + '.] ' + this.questions[i] + ': ' + self.missesResults[i] +
-           ' misses, in ' + self.timeResults[i]/1000 + ' s</li>');  
-        }
-
-        $('#results').html(resultList.join(''));
-
-        $('#endDialog').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
+        // Hide game
+        this.displayElement(0, this.gameField);
+        
+        // Show results screen
+        $('#frmResults').show();
+        this.displayElement(1, "frmResults");
     };
 
-    this.restartGame = function() {
+    this.resetGame = function() {
         this.timeAvailable = 60;
         this.timeResults = {};
         this.missesResults = {};
         this.questions = {};
+        this.missed = 0;
+        this.questionId = 0;
+        $('#'+this.statusField).removeClass();
+    };
 
-        this.startGame();
+    this.newGame = function() {
+        this.resetGame();
+
+        this.displayElement(0, "frmResults");
+        $('#frmResults').hide();
+        
+        $('#frmWelcome').show();
+        this.displayElement(1, "frmWelcome");
     };
 
     this.init = function(){
-        this.timeAvailable = 60;
         this.questionField = 'question';
         this.inputField = 'input';
         this.statusField = 'status';
         this.gameField = 'game';
-        this.timeResults = {};
-        this.missesResults = {};
-        this.questions = {};
+        
+        this.resetGame();
 
         this.gauge = new JustGage({
             id: "gauge", 
             value: 60, 
             min: 0,
             max: this.timeAvailable,
-            title: "Time left",
+            title: "Time left:",
             levelColors: ['#E81700', '#FF530D', '#FFED60', '#CAFFD1']
         });
+
+        $('#'+this.inputField).keydown(function (e){
+            if (self.started && e.keyCode == 13){
+                answer = $('#'+self.inputField).val();
+                self.checkInput(e, answer);
+            }
+        })
+
+        this.displayElement(1, "frmWelcome");
     }
 
     this.stopMainTimer = function(){
@@ -141,8 +151,4 @@ function MathGame() {
     };
 
     this.init();
-    $('#startDialog').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
 };
