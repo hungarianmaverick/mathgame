@@ -106,7 +106,7 @@ function MathGame() {
     };
 
     this.init = function(){
-        this.timeAvailable = 20;
+        this.timeAvailable = 60;
         this.questionField = 'question';
         this.inputField = 'input';
         this.statusField = 'status';
