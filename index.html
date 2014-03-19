@@ -36,22 +36,22 @@
         <div id="frmHelp" style="max-width: 500px; opacity: 0; display: none;">
             <h1>How to play?</h1>
             <div align="left">
-            <h2><span class="label label-success">Classic mode:</span></h2>
-            <p>In Classic mode, your only goal is to solve as many operation as you can in 60 seconds! There are no consequences for giving wrong answers.</p>
-            <h2><span class="label label-danger">Survival mode:</span></h2>
-            <p>In Survival mode your goal is to play as long as you can. You start with 30 seconds remaining, but every good answer gives you an extra 3 seconds. Time can go up to a maximum of 60 seconds. In this mode however, every wrong answer is punished with -1 seconds from your remaining time.</p>
-        </div>
+                <h2><span class="label label-success">Classic mode:</span></h2>
+                <p>In Classic mode, your only goal is to solve as many operation as you can in 60 seconds! There are no consequences for giving wrong answers.</p>
+                <h2><span class="label label-danger">Survival mode:</span></h2>
+                <p>In Survival mode your goal is to play as long as you can. You start with 30 seconds remaining, but every good answer gives you an extra 3 seconds. Time can go up to a maximum of 60 seconds. In this mode however, every wrong answer is punished with -1 seconds from your remaining time.</p>
+            </div>
             <br />
             <div class="span2">
                 <p><button id="btnHelpOk" class="btn btn-primary btn-block">Got it!</button></p>
             </div>
         </div>		
-        <div id="game" style="opacity: 0;" align="center">
+        <div id="frmGame" style="opacity: 0;" align="center">
             <div>
                 <h1 id="lblMode"></h1>
-                <span id="question" style="min-width: 80px; font-size: 16pt;"></span>
-                <input type="number" id="input" style="width: 70px; font-size: 16pt;"/>
-                <span style="opacity: 0;" id="status" class="glyphicon glyphicon-cloud"></span>
+                <span id="lblQuestion" style="min-width: 80px; font-size: 16pt;"></span>
+                <input type="number" id="userInput" style="width: 70px; font-size: 16pt;"/>
+                <span style="opacity: 0;" id="lblStatus" class="glyphicon glyphicon-cloud"></span>
             </div>
             <div id="gauge" style="width: 200px; height: 160px;"></div>
         </div>
@@ -70,27 +70,27 @@
 <script src="js/helpers.js"></script>
 <script src="js/game.js"></script>
 <script>
-    game = new MathGame();
-    
-    $("#btnClassic").click(function(){
-        game.startGame("classic");
-    });
+game = new MathGame();
 
-    $("#btnSurvival").click(function(){
-        game.startGame("survival");
-    });
+$("#btnClassic").click(function(){
+    game.startGame("classic");
+});
 
-    $("#btnHelp").click(function(){
-        game.showInfo();
-    });
+$("#btnSurvival").click(function(){
+    game.startGame("survival");
+});
 
-    $("#btnRestart").click(function(){
-        game.newGame();
-    });
+$("#btnHelp").click(function(){
+    game.showInfo();
+});
 
-    $("#btnHelpOk").click(function(){
-        game.newGame();
-    });
+$("#btnRestart").click(function(){
+    game.showWelcome();
+});
+
+$("#btnHelpOk").click(function(){
+    game.showWelcome();
+});
 </script>
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
