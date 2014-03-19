@@ -28,20 +28,39 @@ function MathGame() {
     };
 
     this.checkInput = function(e, answer){
-        var time = new Date().getTime() - self.lastScrambleTime;
         if (answer == self.currentSolution){
-            self.timeResults[self.questionId] = time;
             self.setStatus(true);
-            self.scramble();
+            self.shuffle();
+            if (self.mode == "survival"){
+                self.addSeconds(3);
+            }
         }
         else{
-            self.missesResults[self.questionId]++;
             self.missed++;
             self.setStatus(false);
+            if (self.mode == "survival"){
+                self.addSeconds(-1);
+            }
         }
-    }
+    };
 
-    this.scramble = function(){
+    this.addSeconds = function(seconds){
+        var futureValue = self.timeAvailable + seconds;
+
+        if (futureValue>60){
+            futureValue=60;
+        }
+
+        if (futureValue<0){
+            futureValue=0;
+        }
+
+        self.timeAvailable = futureValue;
+        self.gauge.refresh(self.timeAvailable);
+        // Do some animation stuff here +3 in green, -1 in red
+    };
+
+    this.shuffle = function(){
         var a = getRandomInt(-99, 99);
         var b = a+getRandomInt(-99, 99);
         var solution = a+b;
@@ -49,53 +68,69 @@ function MathGame() {
         this.currentSolution = solution;
         this.setQuestion(a, b);
         this.clearInput();
-        
+
         this.questionId++;
         this.questions[this.questionId] = a.toString() + getSignedNumber(b);
         this.missesResults[self.questionId] = 0;
-        
-        this.lastScrambleTime = new Date().getTime();
     };
 
-    this.startGame = function() {
+    this.startGame = function(mode) {
         this.startTime = new Date().getTime();
         this.started = true;
-        
+
         this.mainTimerHandler = setInterval(this.mainTimer, 1000);
         this.gauge.refresh(self.timeAvailable);
-        this.scramble();
+        this.mode = mode;
+        this.shuffle();
 
         // Hide welcome screen
         this.displayElement(0, "frmWelcome");
         $('#frmWelcome').hide();
 
+        if (mode == "classic"){
+            this.timeAvailable = 60;
+            $('#lblMode').html('Classic mode');
+        }
+        else{
+            this.timeAvailable = 30;
+            $('#lblMode').html('Survival mode');
+        }
+        this.gauge.refresh(self.timeAvailable);
+
         this.displayElement(1, this.gameField);
 
         $('#'+this.inputField).focus()
-    }
+    };
 
     this.endGame = function() {
         this.started = false;
 
         $('#lblScored').html(self.questionId-1);
         $('#lblMissed').html(self.missed);
+        $('#lblTime').html(self.totalsecs);
 
         // Hide game
         this.displayElement(0, this.gameField);
-        
+
         // Show results screen
+        if (this.mode == "survival"){
+            $('#frmGameTime').show();
+        }
+        else{
+            $('#frmGameTime').hide();
+        }
+
         $('#frmResults').show();
         this.displayElement(1, "frmResults");
     };
 
     this.resetGame = function() {
-        this.timeAvailable = 60;
         this.timeResults = {};
         this.missesResults = {};
         this.questions = {};
         this.missed = 0;
         this.questionId = 0;
-        $('#'+this.statusField).removeClass();
+        this.totalsecs = 0;
     };
 
     this.newGame = function() {
@@ -103,7 +138,10 @@ function MathGame() {
 
         this.displayElement(0, "frmResults");
         $('#frmResults').hide();
-        
+
+        this.displayElement(0, "frmHelp");
+        $('#frmHelp').hide();
+
         $('#frmWelcome').show();
         this.displayElement(1, "frmWelcome");
     };
@@ -113,14 +151,14 @@ function MathGame() {
         this.inputField = 'input';
         this.statusField = 'status';
         this.gameField = 'game';
-        
+
         this.resetGame();
 
         this.gauge = new JustGage({
             id: "gauge", 
             value: 60, 
             min: 0,
-            max: this.timeAvailable,
+            max: 60,
             title: "Time left:",
             levelColors: ['#E81700', '#FF530D', '#FFED60', '#CAFFD1']
         });
@@ -133,7 +171,7 @@ function MathGame() {
         })
 
         this.displayElement(1, "frmWelcome");
-    }
+    };
 
     this.stopMainTimer = function(){
         clearInterval(self.mainTimerHandler);
@@ -141,6 +179,7 @@ function MathGame() {
 
     this.mainTimer = function(){
         if (self.timeAvailable-->0){
+            self.totalsecs++;
             self.gauge.refresh(self.timeAvailable);
         }
         else{
@@ -149,6 +188,14 @@ function MathGame() {
             self.endGame();
         }           
     };
+
+    this.showInfo  = function(){
+        this.displayElement(0, "frmWelcome");
+        $('#frmWelcome').hide();
+
+        $('#frmHelp').show();
+        this.displayElement(1, "frmHelp");
+    }
 
     this.init();
 };

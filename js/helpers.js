@@ -5,7 +5,11 @@ function getRandomInt (min, max) {
 function getSignedNumber(theNumber){
     if(theNumber > 0){
         return "+" + theNumber;
-    }else{
+    }
+    else if (theNumber == 0){
+        return "+" + theNumber;
+    }
+    else{
         return theNumber.toString();
     }
 }
