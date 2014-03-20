@@ -2,12 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="description" content="Free Javascript math game">
+    <meta name="keywords" content="Math,Game,Free,Online,JavaScript">
+    <meta name="author" content="Tamas Boros">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
     <title>My little math game</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div align="center" id="content" style="min-height: 500px;">
-        <div id="frmWelcome" style="max-width: 500px; opacity: 0;">
+    <div align="center" id="content" style="width: 100%;">
+        <div id="frmGame" style="visibility:hidden; opacity: 0; height: 0px;" align="center" class="frm">
+            <div>
+                <h1 id="lblMode"></h1>
+                <span id="lblQuestion" style="min-width: 80px; font-size: 16pt;"></span>
+                <input type="number" id="userInput" style="width: 70px; font-size: 16pt;"/>
+                <span style="opacity: 0;" id="lblStatus" class="glyphicon glyphicon-cloud"></span><span id="lblSurvivalPoints" style="opacity: 0; font-weight: bold;"></span>
+            </div>
+            <div id="gauge" style="width: 200px; height: 160px;"></div>
+            <br />
+            <div class="span2">
+                <p><button id="btnGiveup" class="btn btn-primary btn-block">Give up!</button></p>
+            </div>
+        </div>
+        <div id="frmWelcome" style="opacity: 0;" class="frm">
             <h1>Welcome to my little math game!</h1>
             <p>Please choose from the available options:</p>
             <div class="span2">
@@ -17,23 +35,22 @@
                 <p><button id="btnHelp" class="btn btn-info btn-block">Help!</button></p>
             </div>
         </div>
-        <div id="frmResults" style="max-width: 500px; opacity: 0; display: none;">
+        <div id="frmResults" style="opacity: 0; display: none;" class="frm">
             <h1>That's it, time's up!</h1>
             <h2>Your results:</h2>
-            <h1>
-                <span class="label label-success">Scored:</span> <span id="lblScored"></span>
-                <span class="label label-danger">Missed:</span> <span id="lblMissed"></span>
-            </h1>
-            <br />
-            <div id="frmGameTime" style="display: none;">
-                <h1><span class="label label-warning">Game time:</span> <span id="lblTime"></span></h1>
-                <br />
+            <div align="left">
+                <h1>
+                    <p><span class="label label-success">Scored:</span> <span id="lblScored"></span></p>
+                    <p><span class="label label-danger">Missed:</span> <span id="lblMissed"></span></p>
+                    <p id="frmGameTime" style="display: none;"><span class="label label-warning">Time:</span> <span id="lblTime"></span></h1></p>
+                </h1>
             </div>
+            <br />
             <div class="span2">
                 <p><button id="btnRestart" class="btn btn-primary btn-block">New game</button></p>
             </div>
         </div>
-        <div id="frmHelp" style="max-width: 500px; opacity: 0; display: none;">
+        <div id="frmHelp" style="opacity: 0; display: none;" class="frm">
             <h1>How to play?</h1>
             <div align="left">
                 <h2><span class="label label-success">Classic mode:</span></h2>
@@ -45,19 +62,10 @@
             <div class="span2">
                 <p><button id="btnHelpOk" class="btn btn-primary btn-block">Got it!</button></p>
             </div>
-        </div>		
-        <div id="frmGame" style="opacity: 0;" align="center">
-            <div>
-                <h1 id="lblMode"></h1>
-                <span id="lblQuestion" style="min-width: 80px; font-size: 16pt;"></span>
-                <input type="number" id="userInput" style="width: 70px; font-size: 16pt;"/>
-                <span style="opacity: 0;" id="lblStatus" class="glyphicon glyphicon-cloud"></span>
-            </div>
-            <div id="gauge" style="width: 200px; height: 160px;"></div>
         </div>
     </div>
 </div>
-<footer>
+<footer style="margin-top: 20px;">
     <div>
         <p class="copyright text-muted small text-center">Copyright &copy; Tamas Boros 2014.</p>
         <p class="copyright text-muted small text-center">Early test version. All Rights Reserved.</p>
@@ -90,6 +98,10 @@ $("#btnRestart").click(function(){
 
 $("#btnHelpOk").click(function(){
     game.showWelcome();
+});
+
+$("#btnGiveup").click(function(){
+    game.giveup();
 });
 </script>
 <script>

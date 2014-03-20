@@ -52,7 +52,9 @@ function MathGame() {
         hideElement("#frmWelcome");
         
         // Show game field
-        fadeElement(1, "#frmGame");
+        $('#frmGame').height(341);
+        $('#frmGame').css("visibility", "visible");
+        fadeElement(1, '#frmGame');
 
         // Set time
         if (mode == "classic"){
@@ -70,6 +72,9 @@ function MathGame() {
         // Shuffle
         this.shuffle();
 
+        // Clear input
+        clearInput("#userInput");
+
         // Focus
         $('#userInput').focus();
     };
@@ -83,8 +88,6 @@ function MathGame() {
         $('#lblMissed').html(self.missed);
         $('#lblTime').html(self.totalsecs);
 
-        // Hide game
-        fadeElement(0, "#frmGame")
 
         // No need to show game time
         // in classic mode
@@ -95,8 +98,21 @@ function MathGame() {
             $('#frmGameTime').hide();
         }
 
-        // Show results screen
-        showElement('#frmResults');
+        // Hide game
+        $('#frmGame').animate({opacity: 0}, 200, function(){
+            // "hide"
+            $('#frmGame').height(0);    
+            $('#frmGame').css("visibility", "hidden");
+            
+            // Show results screen
+            showElement('#frmResults');
+        });
+    };
+
+    this.giveup = function() {
+        self.stopMainTimer();
+        clearInput("#userInput");
+        self.endGame();
     };
 
     this.shuffle = function(){
@@ -108,31 +124,26 @@ function MathGame() {
         // Update UI
         this.currentSolution = solution;
         setQuestion(a, b, "#lblQuestion");
-        clearInput("#userInput");
 
         this.questionId++;
     };
 
     this.checkInput = function(e, answer){
-        if (answer == self.currentSolution){
-            // Flash the ok sign,
-            // get the new question
-            // and add 3 secs in survival mode
-            flashStatus(true, "#lblStatus");
+        var isGood = (answer == self.currentSolution);
+        var isSurvival = (self.mode == "survival");
+
+        flashStatus(isGood, "#lblStatus");
+        clearInput("#userInput");
+
+        if (isGood){
             self.shuffle();
-            if (self.mode == "survival"){
-                self.addSeconds(3);
-            }
         }
         else{
-            // Flash the not ok sign,
-            // count wrong answers,
-            // and subtract 1 sec in survival mode
-            flashStatus(false, "#lblStatus");
             self.missed++;
-            if (self.mode == "survival"){
-                self.addSeconds(-1);
-            }
+        }
+
+        if (isSurvival){
+            self.addSeconds(isGood);
         }
     };
 
@@ -156,10 +167,18 @@ function MathGame() {
         clearInterval(self.mainTimerHandler);
     };
 
-    this.addSeconds = function(seconds){
+    this.addSeconds = function(isGood){
         // Add or remove seconds from time remaining
         // in survival mode.
-        var futureValue = self.timeAvailable + seconds;
+
+        var futureValue;
+
+        if (isGood){
+            futureValue = self.timeAvailable + 3;
+        }
+        else{
+            futureValue = self.timeAvailable - 1;;
+        }
 
         // Max: 60
         if (futureValue>60){
@@ -173,7 +192,7 @@ function MathGame() {
 
         self.timeAvailable = futureValue;
         self.gauge.refresh(self.timeAvailable);
-        // Do some animation stuff here +3 in green, -1 in red
+        survivalStatus(isGood, "#lblSurvivalPoints");
     };
 
     this.showWelcome = function() {

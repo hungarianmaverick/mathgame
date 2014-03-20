@@ -36,6 +36,21 @@ function setQuestion(a, b, questionField){
     $(questionField).text(a.toString() + getSignedNumber(b) + "=");
 };
 
+function survivalStatus(isGood, statusField){
+    if (isGood){
+        $(statusField).css("color", "darkgreen");
+        $(statusField).text("+3");
+    }
+    else{
+        $(statusField).css("color", "darkred");
+        $(statusField).text("-1");
+    }
+
+    $(statusField).animate({opacity: 1}, 200, function(){
+        $(statusField).animate({opacity: 0}, 400);
+    });
+}
+
 function flashStatus(status, statusField){
     if (status){
         $(statusField).removeClass().addClass('glyphicon glyphicon-ok');

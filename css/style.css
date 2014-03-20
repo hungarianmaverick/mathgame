@@ -1,0 +1,16 @@
+/* Small screen */
+@media only screen 
+and (max-device-width : 700px) {
+  div.frm{
+  	width: 66%;
+  	min-width: 200px;
+  }
+}
+
+/* Desktops and laptops */
+@media only screen 
+and (min-width : 701px) {
+  div.frm{
+  	max-width: 300px;
+  }
+}
