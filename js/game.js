@@ -119,14 +119,83 @@ function MathGame() {
         // Generate a random operation
         var a = getRandomInt(-99, 99);
         var b = a+getRandomInt(-99, 99);
-        var solution = a+b;
+        
+        var mode = getRandomInt(0, 3);
+        var result = {};
 
-        // Update UI
-        this.currentSolution = solution;
-        setQuestion(a, b, "#lblQuestion");
+        if (mode==0){
+            result = this.divide(-99, 99);
+        }
+        else if (mode==1){
+            result = this.multiply(-99, 99);  
+        }
+        else{
+            result = this.addAndSubstract(-99, 99);   
+        }
+
+        // // Update UI
+        this.currentSolution = result.solution;
+        setQuestion(result.question, "#lblQuestion");
 
         this.questionId++;
     };
+
+    this.addAndSubstract = function(min, max){
+        var a = getRandomInt(min, max);
+        var b = a+getRandomInt(min, max);
+        var solution = a+b;
+        
+        return {
+            'solution': solution,
+            'question': a.toString()+getSign(b)+Math.abs(b).toString()+'='
+        };
+    }
+
+    this.divide = function(min, max){
+        var a = getRandomInt(min, max);
+        var b = getRandomInt(Math.round(min/10), Math.round(max/10));
+        while(b==0){
+            b = getRandomInt(Math.round(min/10), Math.round(max/10));
+        }
+        var solution = Math.round(a/b);
+        a = solution * b;
+
+        var a_str = formatNegative(a);
+        var b_str = formatNegative(b);
+
+        return {
+            'solution': solution,
+            'question': a_str+'/'+b_str+'='
+        };
+    };
+
+    this.multiply = function(min, max){
+        var a = getRandomInt(min, max);
+        var b = getRandomInt(Math.round(min/10), Math.round(max/10));
+        var solution = a*b;
+
+        var a_str = formatNegative(a);
+        var b_str = formatNegative(b);
+
+        return {
+            'solution': solution,
+            'question': a_str+'*'+b_str+'='
+        };      
+    };
+
+    this.log2 = function(min, max){
+        // TBD 16bit
+        var a = getRandomInt(-99, 99);
+        var b = a+getRandomInt(-99, 99);
+        var solution = a+b;
+    };    
+
+    this.pow2 = function(min, max){
+        // TBD 16bit
+        var a = getRandomInt(-99, 99);
+        var b = a+getRandomInt(-99, 99);
+        var solution = a+b;
+    };    
 
     this.checkInput = function(e, answer){
         var isGood = (answer == self.currentSolution);

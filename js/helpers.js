@@ -2,16 +2,17 @@ function getRandomInt (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function getSignedNumber(theNumber){
-    if(theNumber > 0){
-        return "+" + theNumber;
-    }
-    else if (theNumber == 0){
-        return "+" + theNumber;
+function getSign(theNumber){
+    if(theNumber >= 0){
+        return "+";
     }
     else{
-        return theNumber.toString();
+        return "-";
     }
+}
+
+function formatNegative(theNumber){
+    return theNumber<0?'('+theNumber.toString()+')':theNumber.toString();
 }
 
 function hideElement(element){
@@ -32,8 +33,8 @@ function clearInput(inputField){
     $(inputField).val("");
 };
 
-function setQuestion(a, b, questionField){
-    $(questionField).text(a.toString() + getSignedNumber(b) + "=");
+function setQuestion(question, questionField){
+    $(questionField).text(question);
 };
 
 function survivalStatus(isGood, statusField){
